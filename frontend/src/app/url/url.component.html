@@ -1,0 +1,17 @@
+<input #shortUrl/>
+<button (click)="getUrl(shortUrl.value)">FETCH URL</button>
+
+<br/>
+<br/>
+
+<input #longUrl/>
+<button (click)="postUrl(longUrl.value)">POST URL</button>
+
+<p>Short URL: {{urlData.shortUrl}}</p>
+<p>Long URL: {{urlData.longUrl}}</p>
+<p>Created At: {{urlData.createdAt}}</p>
+<p>Expire At: {{urlData.expireAt}}</p>
+<p>Click Count: {{urlData.clickCount}}</p>
+<p>User Agent: {{urlData.userAgent}}</p>
+<p>IP Address: {{urlData.ipAddress}}</p>
+<p>Geo Location: {{urlData.geoLocation}}</p>
