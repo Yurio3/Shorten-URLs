@@ -16,17 +16,23 @@ public class UrlStorageService {
 
     public Url store(Url urlDatabase) {
         cacheService.store(new UrlCache(urlDatabase));
-        return urlDatabaseRepository.save(urlDatabase);
+        return urlDatabaseRepository.save(urlDatabase).block();
     }
 
     public UrlData getByLongUrl(String longUrl) {
         UrlData data = cacheService.getByLongUrl(longUrl);
-        return data != null ? data : urlDatabaseRepository.findByLongUrl(longUrl).orElse(null);
+        return data != null ? data : urlDatabaseRepository.findByLongUrl(longUrl).blockFirst();
     }
 
     public UrlData get(String shortUrl) {
         UrlData data = cacheService.get(shortUrl);
-        return data != null ? data : urlDatabaseRepository.findById(shortUrl).orElse(null);
+        data = data != null ? data : urlDatabaseRepository.findById(shortUrl).block();
+        if (data == null) {
+            return data;
+        }
+        data.setClickCount(data.getClickCount() + 1);
+        store(data instanceof Url ? (Url) data : new Url((UrlCache) data));
+        return data;
     }
 
 }

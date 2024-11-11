@@ -1,0 +1,20 @@
+<h2 mat-dialog-title>Create Short URL</h2>
+<mat-dialog-content>
+
+    <p>Short URL: {{urlData.shortUrl}}</p>
+    <p>Long URL: {{urlData.longUrl}}</p>
+    <p>Created At: {{urlData.createdAt}}</p>
+    <p>Expire At: {{urlData.expireAt}}</p>
+    <p>Click Count: {{urlData.clickCount}}</p>
+    <p>User Agent: {{urlData.userAgent}}</p>
+    <p>IP Address: {{urlData.ipAddress}}</p>
+    <p>Geo Location: {{urlData.geoLocation}}</p>
+    
+  
+  
+</mat-dialog-content>
+
+<mat-dialog-actions style="display: flex; flex-direction: row; justify-content: space-between;">
+  <button mat-button (click)="cancel()">Cancel</button>
+  <button mat-button cdkFocusInitial>Convert URL</button>
+</mat-dialog-actions>

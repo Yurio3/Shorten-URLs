@@ -20,4 +20,15 @@ export class UrlService {
     return this.http.post<UrlData>(`http://localhost:8080/api/url`, { longUrl });
   }
 
+  getUrls() {
+    return JSON.parse(localStorage.getItem("urls") as string) as UrlData[];
+  }
+
+  storeUrl(url: UrlData) {
+    const temp = this.getUrls() || [];
+    temp.push(url);
+    
+    localStorage.setItem("urls", JSON.stringify(temp));
+  }
+
 }

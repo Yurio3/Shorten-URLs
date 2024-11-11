@@ -1,14 +1,13 @@
 package com.comp539.backend.repository;
 
 import com.comp539.backend.model.Url;
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.google.cloud.spring.data.firestore.FirestoreReactiveRepository;
 import org.springframework.stereotype.Repository;
-
-import java.util.Optional;
+import reactor.core.publisher.Flux;
 
 @Repository
-public interface UrlRepository extends JpaRepository<Url, String> {
+public interface UrlRepository extends FirestoreReactiveRepository<Url> {
 
-    Optional<Url> findByLongUrl(String longUrl);
+    Flux<Url> findByLongUrl(String longUrl);
 
 }

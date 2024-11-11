@@ -14,4 +14,6 @@ public interface UrlData {
     public String getIpAddress();
     public String getGeoLocation();
 
+    public void setClickCount(Integer clickCount);
+
 }

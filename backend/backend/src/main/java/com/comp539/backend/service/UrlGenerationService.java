@@ -1,5 +1,6 @@
 package com.comp539.backend.service;
 
+import com.comp539.backend.model.UrlCache;
 import com.comp539.backend.model.UrlData;
 import com.comp539.backend.model.Url;
 import lombok.AllArgsConstructor;
@@ -12,6 +13,8 @@ import java.util.Date;
 @Service
 @AllArgsConstructor
 public class UrlGenerationService {
+
+
 
     private final UrlStorageService urlStorageService;
 
