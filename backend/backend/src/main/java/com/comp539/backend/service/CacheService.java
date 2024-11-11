@@ -11,14 +11,16 @@ public class CacheService {
 
     private final UrlCacheRepository urlCacheRepository;
 
-
-    // for now let it be void
-    public UrlCache save(UrlCache urlRedis) {
+    public UrlCache store(UrlCache urlRedis) {
         return urlCacheRepository.save(urlRedis);
     }
 
     public UrlCache get(String shortUrl) {
         return urlCacheRepository.findById(shortUrl).orElse(null);
+    }
+
+    public UrlCache getByLongUrl(String longUrl) {
+        return urlCacheRepository.findByLongUrl(longUrl).orElse(null);
     }
 
 }

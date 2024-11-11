@@ -1,8 +1,7 @@
 package com.comp539.backend.service;
 
 import com.comp539.backend.model.UrlData;
-import com.comp539.backend.model.UrlDatabase;
-import com.comp539.backend.model.UrlCache;
+import com.comp539.backend.model.Url;
 import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Service;
@@ -14,10 +13,14 @@ import java.util.Date;
 @AllArgsConstructor
 public class UrlGenerationService {
 
-    private final CacheService cacheService;
     private final UrlStorageService urlStorageService;
 
     public UrlData generateUrl(String longUrl, String userAgent, String ipAddress) {
+        UrlData data = urlStorageService.getByLongUrl(longUrl);
+        if (data != null) {
+            return data;
+        }
+
         String shortUrl = RandomStringUtils.randomAlphanumeric(6).toUpperCase();
 
         while (urlStorageService.get(shortUrl) != null) {
@@ -28,11 +31,12 @@ public class UrlGenerationService {
         Date createdAt = new Date();
 
         Calendar c = Calendar.getInstance();
-        c.setTime(createdAt); // Using today's date
+        c.setTime(createdAt);
         c.add(Calendar.DATE, 5); // Adding 5 days
 
         Date expireAt = c.getTime();
-        UrlCache urlRedis = new UrlCache(
+
+        Url urlDatabase = new Url(
             shortUrl,
             longUrl,
             createdAt,
@@ -42,21 +46,9 @@ public class UrlGenerationService {
             ipAddress,
             geoLocation
         );
-        UrlDatabase urlDatabase = new UrlDatabase(
-                shortUrl,
-                longUrl,
-                createdAt,
-                expireAt,
-                1,
-                userAgent,
-                ipAddress,
-                geoLocation
-        );
 
-        cacheService.save(urlRedis);
-        urlStorageService.save(urlDatabase);
+        return urlStorageService.store(urlDatabase);
 
-        return urlDatabase;
     }
 
 }

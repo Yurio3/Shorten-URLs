@@ -17,8 +17,7 @@ export class UrlService {
   }
 
   postUrl(longUrl: string): Observable<UrlData> {
-    const data = { longUrl };
-    return this.http.post<UrlData>(`http://localhost:8080/api/url`, data);
+    return this.http.post<UrlData>(`http://localhost:8080/api/url`, { longUrl });
   }
 
 }

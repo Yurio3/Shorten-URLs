@@ -26,5 +26,15 @@ public class UrlCache implements UrlData {
     private String ipAddress;
     private String geoLocation;
 
+    public UrlCache(Url urlDatabase) {
+        this.id = urlDatabase.getId();
+        this.longUrl = urlDatabase.getLongUrl();
+        this.createdAt = urlDatabase.getCreatedAt();
+        this.expireAt = urlDatabase.getExpireAt();
+        this.clickCount = urlDatabase.getClickCount();
+        this.userAgent = urlDatabase.getUserAgent();
+        this.ipAddress = urlDatabase.getIpAddress();
+        this.geoLocation = urlDatabase.getGeoLocation();
+    }
 
 }

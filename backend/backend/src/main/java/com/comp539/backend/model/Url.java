@@ -14,10 +14,10 @@ import java.util.Date;
 @AllArgsConstructor
 @Getter
 @Setter
-public class UrlDatabase implements UrlData {
+public class Url implements UrlData {
 
     @Id
-    private String id;  // shortUrl
+    private String id;
 
     private String longUrl;
     private Date createdAt;
