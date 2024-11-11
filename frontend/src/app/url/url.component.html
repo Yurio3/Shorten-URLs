@@ -1,22 +1,7 @@
-<!--
-<input #shortUrl/>
-<button (click)="getUrl(shortUrl.value)">FETCH URL</button>
-
-<br/>
-<br/>
-
-<input #longUrl/>
-<button (click)="postUrl(longUrl.value)">POST URL</button>
-
-<p>Short URL: {{urlData.shortUrl}}</p>
-<p>Long URL: {{urlData.longUrl}}</p>
-<p>Created At: {{urlData.createdAt}}</p>
-<p>Expire At: {{urlData.expireAt}}</p>
-<p>Click Count: {{urlData.clickCount}}</p>
-<p>User Agent: {{urlData.userAgent}}</p>
-<p>IP Address: {{urlData.ipAddress}}</p>
-<p>Geo Location: {{urlData.geoLocation}}</p>
--->
+<div class="logout">
+  <div></div>
+  <button mat-raised-button (click)="logout()">Logout</button>
+</div>
 
 <div style="width: 500px; padding: 20px;">
     <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
@@ -34,7 +19,9 @@
             <th mat-header-cell *matHeaderCellDef> ACTION </th>
             <td mat-cell *matCellDef="let element"> 
 
-                <button mat-raised-button (click)="openFetchDialog(element)">Fetch data</button>
+                <button style="margin-right: 10px;" mat-raised-button (click)="openFetchDialog(element)">View record</button>
+                
+                <button mat-raised-button (click)="visitLink(element)">Visit link</button>
 
             </td>
           </ng-container>
@@ -49,5 +36,5 @@
   
 
 <div style="padding: 20px;">
-    <button mat-raised-button (click)="openDialog()">Pick one</button>
+    <button mat-raised-button (click)="openDialog()">Add URL</button>
 </div>

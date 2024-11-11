@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { UrlService } from '../services/url.service';
 import { UrlData } from '../model/url-data';
 
-import {MatButtonModule} from '@angular/material/button';
-import {MatTableModule} from '@angular/material/table';
+import { MatButtonModule } from '@angular/material/button';
+import { MatTableModule } from '@angular/material/table';
 
 import {
   MAT_DIALOG_DATA,
@@ -14,8 +14,8 @@ import {
   MatDialogRef,
   MatDialogTitle,
 } from '@angular/material/dialog';
-import {MatFormFieldModule} from '@angular/material/form-field';
-import {MatInputModule} from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 export interface DialogData {
   animal: string;
@@ -23,12 +23,13 @@ export interface DialogData {
 }
 
 
-import {ChangeDetectionStrategy, inject, model, signal} from '@angular/core';
-import {FormsModule} from '@angular/forms';
+import { ChangeDetectionStrategy, inject, model, signal } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 
-import {MatSnackBar} from '@angular/material/snack-bar';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
 const isValidUrl = (string: string) => {
   try {
@@ -94,7 +95,7 @@ export class DialogOverviewExampleDialog {
 
   constructor(
     private urlService: UrlService,
-  ) {}
+  ) { }
 
   cancel() {
     this.dialogRef.close();
@@ -104,8 +105,8 @@ export class DialogOverviewExampleDialog {
     const longUrl = temp.value;
     if (!longUrl.trim()) {
       this._snackBar.open("URL EMPTY!!", "OK", {
-        verticalPosition: 'top', 
-        horizontalPosition: 'right', 
+        verticalPosition: 'top',
+        horizontalPosition: 'right',
         panelClass: 'snackbar',
 
       });
@@ -115,8 +116,8 @@ export class DialogOverviewExampleDialog {
 
     if (!isValidUrl(longUrl)) {
       this._snackBar.open("URL INVALID!!", "OK", {
-        verticalPosition: 'top', 
-        horizontalPosition: 'right', 
+        verticalPosition: 'top',
+        horizontalPosition: 'right',
         panelClass: 'snackbar',
 
       });
@@ -128,7 +129,7 @@ export class DialogOverviewExampleDialog {
       temp.value = '';
       this.urlData = res;
       this.urlService.storeUrl(res);
-      
+
     });
   }
 }
@@ -137,24 +138,32 @@ export class DialogOverviewExampleDialog {
 @Component({
   selector: 'app-url',
   standalone: true,
-  imports: [MatTableModule,MatButtonModule],
+  imports: [MatTableModule, MatButtonModule],
   templateUrl: './url.component.html',
   styleUrl: './url.component.scss',
-  
+
 })
 export class UrlComponent implements OnInit {
 
   constructor(
     private urlService: UrlService,
+    private router: Router,
   ) { }
 
+  logout() {
+    this.router.navigate(['/login']);
+  }
 
   displayedColumns = ['shortUrl', 'action']
 
   openFetchDialog(url: UrlData) {
     this.urlService.getUrl(url.shortUrl).subscribe(res => {
-      this.dialog.open(FetchUrlDialog, {data: res});
+      this.dialog.open(FetchUrlDialog, { data: res });
     })
+  }
+
+  visitLink(url: UrlData) {
+    window.location.href = url.longUrl;
   }
 
   ngOnInit() {

@@ -80,7 +80,7 @@ export class LoginComponent {
 
 
   login() {
-    this.userService.register(this.loginForm.value).subscribe(() => {
+    this.userService.login(this.loginForm.value).subscribe(() => {
       this.router.navigate(['/url']);
     }, () => {
       this._snackBar.open("ERROR!", "CLOSE");
