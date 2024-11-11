@@ -1,1 +1,28 @@
 <app-google-login (loginWithGoogle)="googleSignin($event)"></app-google-login>
+
+<br/><br/><br/><br/><br/>
+
+<div class="login" [formGroup]="loginForm">
+    <h1>Login</h1>
+        <div>
+            <mat-form-field appearance="fill" style="width: 500px;">
+                <mat-label>Email</mat-label>
+                <input matInput placeholder="Email" formControlName="email">
+              </mat-form-field>
+        </div>
+        
+      
+        <div>
+            <mat-form-field appearance="fill" style="width: 500px;">
+                <mat-label>Password</mat-label>
+                <input matInput placeholder="Password" formControlName="password">
+              </mat-form-field>
+        </div>
+
+
+
+      <p>
+        <button mat-raised-button (click)="login()">Login</button>
+
+      </p>
+</div>

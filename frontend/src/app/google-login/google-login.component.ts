@@ -1,17 +1,7 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-
-import {
-
-  SocialAuthService,
-
-  GoogleLoginProvider,
-
-  SocialUser,
-
-} from '@abacritt/angularx-social-login';
 import { CommonModule } from '@angular/common';
+import { MatButtonModule } from '@angular/material/button';
 
 declare global {
   interface Window {
@@ -22,7 +12,7 @@ declare global {
 @Component({
   selector: 'app-google-login',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, MatButtonModule],
   templateUrl: './google-login.component.html',
   styleUrl: './google-login.component.scss'
 })
