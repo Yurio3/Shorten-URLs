@@ -23,8 +23,7 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<UserDTO> register(@RequestBody UserDTO userDTO) {
-        User userConverted = new User(userDTO.getEmail(), userDTO.getPassword(), userDTO.getFirstName(), userDTO.getLastName());
-        User user = userService.register(userConverted);
+        User user = userService.register(new User(userDTO.getEmail(), userDTO.getPassword(), userDTO.getFirstName(), userDTO.getLastName()));
         return user != null ? ResponseEntity.ok(new UserDTO(user)) : ResponseEntity.badRequest().build();
     }
 

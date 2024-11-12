@@ -4,16 +4,22 @@ import java.util.Date;
 
 public interface UrlData {
 
+    String getId();
+    String getLongUrl();
+    Date getCreatedAt();
+    Date getExpireAt();
+    Integer getClickCount();
+    String getUserAgent();
+    String getIpAddress();
+    String getGeoLocation();
 
-    public String getId();
-    public String getLongUrl();
-    public Date getCreatedAt();
-    public Date getExpireAt();
-    public Integer getClickCount();
-    public String getUserAgent();
-    public String getIpAddress();
-    public String getGeoLocation();
-
-    public void setClickCount(Integer clickCount);
+    void setId(String id);
+    void setLongUrl(String longUrl);
+    void setCreatedAt(Date createdAt);
+    void setExpireAt(Date expireAt);
+    void setClickCount(Integer clickCount);
+    void setUserAgent(String userAgent);
+    void setIpAddress(String ipAddress);
+    void setGeoLocation(String geoLocation);
 
 }

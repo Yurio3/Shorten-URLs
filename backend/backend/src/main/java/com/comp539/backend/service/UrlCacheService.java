@@ -7,19 +7,19 @@ import org.springframework.stereotype.Service;
 
 @Service
 @AllArgsConstructor
-public class CacheService {
+public class UrlCacheService {
 
     private final UrlCacheRepository urlCacheRepository;
 
-    public UrlCache store(UrlCache urlRedis) {
-        return urlCacheRepository.save(urlRedis);
+    public UrlCache store(UrlCache url) {
+        return urlCacheRepository.save(url);
     }
 
-    public UrlCache get(String shortUrl) {
+    public UrlCache fetch(String shortUrl) {
         return urlCacheRepository.findById(shortUrl).orElse(null);
     }
 
-    public UrlCache getByLongUrl(String longUrl) {
+    public UrlCache fetchByLongUrl(String longUrl) {
         return urlCacheRepository.findByLongUrl(longUrl).orElse(null);
     }
 

@@ -25,10 +25,10 @@ public class TokenUtils {
     public String generateToken(String email) {
         return Jwts.builder()
                 .setSubject(email)
-                .setIssuer(this.APP_NAME)
+                .setIssuer(APP_NAME)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(new Date().getTime() + this.EXPIRES_IN))
-                .signWith(this.SIGNATURE_ALGORITHM, this.APP_SECRET).compact();
+                .setExpiration(new Date(new Date().getTime() + EXPIRES_IN))
+                .signWith(SIGNATURE_ALGORITHM, APP_SECRET).compact();
     }
 
     public boolean validateToken(UserDetails user, String token) {
@@ -38,7 +38,7 @@ public class TokenUtils {
 
     public String getEmail(String token) {
         return Jwts.parser()
-                .setSigningKey(this.APP_SECRET)
+                .setSigningKey(APP_SECRET)
                 .parseClaimsJws(token)
                 .getBody()
                 .getSubject();

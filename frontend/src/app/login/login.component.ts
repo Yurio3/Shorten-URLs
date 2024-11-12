@@ -15,6 +15,7 @@ import { Router } from '@angular/router';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { StorageService } from '../services/storage.service';
 
 @Component({
   selector: 'app-login',
@@ -41,6 +42,7 @@ export class LoginComponent {
 
     private formBuilder: FormBuilder,
     private router: Router,
+    private storageService: StorageService,
 
   ) { }
   ngOnDestroy(): void {
@@ -80,7 +82,8 @@ export class LoginComponent {
 
 
   login() {
-    this.userService.login(this.loginForm.value).subscribe(() => {
+    this.userService.login(this.loginForm.value).subscribe(res => {
+      this.storageService.setToken(res.password);
       this.router.navigate(['/url']);
     }, () => {
       this._snackBar.open("ERROR!", "CLOSE");

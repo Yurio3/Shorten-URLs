@@ -25,7 +25,7 @@ import org.springframework.web.filter.CorsFilter;
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity(securedEnabled = true, jsr250Enabled = true)
-public class SecurityConfig{
+public class SecurityConfig {
 
     @Autowired
     private UserService userService;
@@ -39,8 +39,7 @@ public class SecurityConfig{
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(HttpSecurity http, BCryptPasswordEncoder bCryptPasswordEncoder, UserDetailsService userDetailService)
-            throws Exception {
+    public AuthenticationManager authenticationManager(HttpSecurity http, BCryptPasswordEncoder bCryptPasswordEncoder, UserDetailsService userDetailService) throws Exception {
         return http.getSharedObject(AuthenticationManagerBuilder.class)
                 .userDetailsService(userService)
                 .passwordEncoder(bCryptPasswordEncoder)
@@ -66,15 +65,13 @@ public class SecurityConfig{
                 .authorizeHttpRequests(e ->
                         e.requestMatchers("/api/user/register").permitAll()
                                 .requestMatchers("api/user/login").permitAll()
-                                )
+                                .requestMatchers("/api/url/*").authenticated())
                 .sessionManagement(e -> e.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .exceptionHandling(e -> e.authenticationEntryPoint(new AuthEntryPoint()))
                 .addFilterBefore(new AuthFilter(userService, tokenUtils), BasicAuthenticationFilter.class)
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors();
 
-
         return http.build();
     }
-
 }

@@ -12,27 +12,27 @@ import org.springframework.stereotype.Service;
 public class UrlStorageService {
 
     private final UrlRepository urlDatabaseRepository;
-    private final CacheService cacheService;
+    private final UrlCacheService urlCacheService;
 
-    public Url store(Url urlDatabase) {
-        cacheService.store(new UrlCache(urlDatabase));
-        return urlDatabaseRepository.save(urlDatabase).block();
+    public Url store(Url url) {
+        urlCacheService.store(new UrlCache(url));
+        return urlDatabaseRepository.save(url).block();
     }
 
-    public UrlData getByLongUrl(String longUrl) {
-        UrlData data = cacheService.getByLongUrl(longUrl);
-        return data != null ? data : urlDatabaseRepository.findByLongUrl(longUrl).blockFirst();
-    }
-
-    public UrlData get(String shortUrl) {
-        UrlData data = cacheService.get(shortUrl);
-        data = data != null ? data : urlDatabaseRepository.findById(shortUrl).block();
-        if (data == null) {
-            return data;
+    public UrlData fetch(String shortUrl) {
+        UrlData url = urlCacheService.fetch(shortUrl);
+        url = url != null ? url : urlDatabaseRepository.findById(shortUrl).block();
+        if (url == null) {
+            return url;
         }
-        data.setClickCount(data.getClickCount() + 1);
-        store(data instanceof Url ? (Url) data : new Url((UrlCache) data));
-        return data;
+        url.setClickCount(url.getClickCount() + 1);
+        store(url instanceof Url ? (Url) url : new Url((UrlCache) url));
+        return url;
+    }
+
+    public UrlData fetchByLongUrl(String longUrl) {
+        UrlData url = urlCacheService.fetchByLongUrl(longUrl);
+        return url != null ? url : urlDatabaseRepository.findByLongUrl(longUrl).blockFirst();
     }
 
 }

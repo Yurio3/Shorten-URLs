@@ -23,7 +23,7 @@ public class AuthFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String token = request.getHeader(AUTH_HEADER);
-        if (token != null && !token.trim().equals("")) {
+        if (token != null && !token.trim().isEmpty()) {
             UserDetails user = userService.loadUserByUsername(tokenUtils.getEmail(token));
             if (user != null && tokenUtils.validateToken(user, token)) {
                 AuthToken authToken = new AuthToken(user, token);

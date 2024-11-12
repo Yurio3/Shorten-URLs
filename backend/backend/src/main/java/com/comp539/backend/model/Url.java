@@ -10,10 +10,10 @@ import lombok.Setter;
 import java.util.Date;
 
 @Document(collectionName = "url")
-@NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Url implements UrlData {
 
     @DocumentId
@@ -37,6 +37,5 @@ public class Url implements UrlData {
         this.ipAddress = urlCache.getIpAddress();
         this.geoLocation = urlCache.getGeoLocation();
     }
-
 
 }

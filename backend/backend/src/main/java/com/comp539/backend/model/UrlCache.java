@@ -10,10 +10,10 @@ import java.util.Date;
 
 
 @RedisHash("url")
-@AllArgsConstructor
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class UrlCache implements UrlData {
 
     private String id;

@@ -16,14 +16,14 @@ public class UrlGenerationService {
     private final UrlStorageService urlStorageService;
 
     public UrlData generateUrl(String longUrl, String userAgent, String ipAddress) {
-        UrlData data = urlStorageService.getByLongUrl(longUrl);
+        UrlData data = urlStorageService.fetchByLongUrl(longUrl);
         if (data != null) {
             return data;
         }
 
         String shortUrl = RandomStringUtils.randomAlphanumeric(6).toUpperCase();
 
-        while (urlStorageService.get(shortUrl) != null) {
+        while (urlStorageService.fetch(shortUrl) != null) {
             shortUrl = RandomStringUtils.randomAlphanumeric(6).toUpperCase();
         }
 

@@ -2,6 +2,7 @@ package com.comp539.backend.model;
 
 import com.google.cloud.firestore.annotation.DocumentId;
 import com.google.cloud.spring.data.firestore.Document;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,20 +13,18 @@ import java.util.Collection;
 import java.util.List;
 
 @Document(collectionName = "user")
-@NoArgsConstructor
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class User implements UserDetails {
 
     @DocumentId
     private String id;
 
     private String email;
-
     private String password;
-
     private String firstName;
-
     private String lastName;
 
     public User(String email, String password, String firstName, String lastName) {
