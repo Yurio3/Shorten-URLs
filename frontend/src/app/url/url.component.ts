@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UrlService } from '../services/url.service';
-import { UrlData } from '../model/url-data';
+import { Url } from '../model/url';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule } from '@angular/material/table';
@@ -30,6 +30,7 @@ import { HttpClient } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { StorageService } from '../services/storage.service';
 
 const isValidUrl = (string: string) => {
   try {
@@ -59,7 +60,7 @@ const isValidUrl = (string: string) => {
 export class FetchUrlDialog {
   readonly dialogRef = inject(MatDialogRef<FetchUrlDialog>);
   readonly data = inject<DialogData>(MAT_DIALOG_DATA);
-  readonly urlData = this.data as unknown as UrlData;
+  readonly urlData = this.data as unknown as Url;
 
 
   cancel() {
@@ -91,10 +92,11 @@ export class DialogOverviewExampleDialog {
     this._snackBar.open(message, action);
   }
 
-  urlData?: UrlData;
+  urlData?: Url;
 
   constructor(
     private urlService: UrlService,
+    private storageService: StorageService,
   ) { }
 
   cancel() {
@@ -128,7 +130,7 @@ export class DialogOverviewExampleDialog {
     this.urlService.postUrl(longUrl).subscribe(res => {
       temp.value = '';
       this.urlData = res;
-      this.urlService.storeUrl(res);
+      this.storageService.storeUrl(res);
 
     });
   }
@@ -148,6 +150,7 @@ export class UrlComponent implements OnInit {
   constructor(
     private urlService: UrlService,
     private router: Router,
+    private storageService: StorageService,
   ) { }
 
   logout() {
@@ -156,23 +159,25 @@ export class UrlComponent implements OnInit {
 
   displayedColumns = ['shortUrl', 'action']
 
-  openFetchDialog(url: UrlData) {
-    this.urlService.getUrl(url.shortUrl).subscribe(res => {
+  openFetchDialog(shortUrl: string) {
+    this.urlService.getUrl(shortUrl).subscribe(res => {
       this.dialog.open(FetchUrlDialog, { data: res });
-    })
+    });
   }
 
-  visitLink(url: UrlData) {
-    window.location.href = url.longUrl;
+  visitLink(shortUrl: string) {
+    this.urlService.getUrl(shortUrl).subscribe(res => {
+      window.open(res.longUrl, '_blank');
+    });
   }
 
   ngOnInit() {
-    this.dataSource = this.urlService.getUrls() || [];
+    this.dataSource = this.storageService.getUrls() || [];
     console.log(this.dataSource);
   }
 
-  urlData: UrlData = {} as UrlData;
-  dataSource: UrlData[] = [];
+  urlData: Url = {} as Url;
+  dataSource: string[] = [];
 
   getUrl(shortUrl: string) {
     this.urlService.getUrl(shortUrl).subscribe(res => this.urlData = res);

@@ -1,21 +1,22 @@
-import { Component, inject } from '@angular/core';
-import { GoogleLoginComponent } from '../google-login/google-login.component';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+
+import { CommonModule } from '@angular/common';
 
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import {
-  SocialLoginModule,
-} from '@abacritt/angularx-social-login';
-import { CommonModule } from '@angular/common';
-import { SocialAuthService } from '@abacritt/angularx-social-login';
 import { Subscription } from 'rxjs';
-import { UserService } from '../services/user.service';
-import { User } from '../model/user';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+
+import { SocialAuthService, SocialLoginModule } from '@abacritt/angularx-social-login';
 import { StorageService } from '../services/storage.service';
+import { GoogleLoginComponent } from '../google-login/google-login.component';
+import { GoogleWrapperComponent } from '../google-wrapper/google-wrapper.component';
+import { UserService } from '../services/user.service';
+import { User } from '../model/user';
+import { ROUTES } from '../utils/routes';
 
 @Component({
   selector: 'app-login',
@@ -29,65 +30,56 @@ import { StorageService } from '../services/storage.service';
     MatFormField,
     MatInput,
     MatButtonModule,
+    GoogleWrapperComponent,
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit, OnDestroy {
+  loginForm!: FormGroup;
   authSubscription!: Subscription;
+  private _snackBar = inject(MatSnackBar);
 
   constructor(
-    private authService: SocialAuthService,
     private userService: UserService,
-
+    private storageService: StorageService,
     private formBuilder: FormBuilder,
     private router: Router,
-    private storageService: StorageService,
-
+    private authService: SocialAuthService,
   ) { }
-  ngOnDestroy(): void {
-    this.authSubscription.unsubscribe();
-  }
 
   ngOnInit() {
     this.authSubscription = this.authService.authState.subscribe((user) => {
-      this.userService.register(user as unknown as User).subscribe(() => { 
-        this.router.navigate(['/url']);
+      this.userService.register(user as unknown as User).subscribe(() => {
+        this.router.navigate([ROUTES.url]);
       })
     });
 
     this.loginForm = this.formBuilder.group({
       email: ['', Validators.required],
       password: ['', Validators.required],
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
-    })
-
+    });
   }
 
-  googleSignin(googleWrapper: any) {
-    googleWrapper.click();
+  ngOnDestroy() {
+    this.authSubscription.unsubscribe();
   }
-
-
-
-
-
-  private _snackBar = inject(MatSnackBar);
-  openSnackBar(message: string, action: string) {
-    this._snackBar.open(message, action);
-  }
-
-  loginForm!: FormGroup;
-
 
   login() {
+    if (!this.loginForm.valid) {
+      return;
+    }
+
     this.userService.login(this.loginForm.value).subscribe(res => {
       this.storageService.setToken(res.password);
-      this.router.navigate(['/url']);
+      this.router.navigate([ROUTES.url]);
     }, () => {
       this._snackBar.open("ERROR!", "CLOSE");
-    })
+    });
+  }
+
+  register() {
+    this.router.navigate([ROUTES.register]);
   }
 
 }

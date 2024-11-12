@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -6,30 +6,44 @@ import { MatInputModule } from '@angular/material/input';
 import { UserService } from '../services/user.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import { GoogleWrapperComponent } from '../google-wrapper/google-wrapper.component';
+import { Subscription } from 'rxjs';
+import { SocialAuthService } from '@abacritt/angularx-social-login';
+import { User } from '../model/user';
+import { ROUTES } from '../utils/routes';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [MatFormFieldModule, MatInputModule, ReactiveFormsModule, MatButtonModule],
+  imports: [
+    MatFormFieldModule,
+    MatInputModule,
+    ReactiveFormsModule,
+    MatButtonModule,
+    GoogleWrapperComponent,
+  ],
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss'
 })
-export class RegisterComponent implements OnInit {
+export class RegisterComponent implements OnInit, OnDestroy {
+  authSubscription!: Subscription;
+  registerForm!: FormGroup;
+  private _snackBar = inject(MatSnackBar);
 
   constructor(
-    private formBuilder: FormBuilder,
     private userService: UserService,
+    private authService: SocialAuthService,
+    private formBuilder: FormBuilder,
     private router: Router,
   ) { }
 
-  private _snackBar = inject(MatSnackBar);
-  openSnackBar(message: string, action: string) {
-    this._snackBar.open(message, action);
-  }
-
-  registerForm!: FormGroup;
-
   ngOnInit() {
+    this.authSubscription = this.authService.authState.subscribe((user) => {
+      this.userService.register(user as unknown as User).subscribe(() => {
+        this.router.navigate([ROUTES.url]);
+      })
+    });
+
     this.registerForm = this.formBuilder.group({
       email: ['', Validators.required],
       password: ['', Validators.required],
@@ -38,13 +52,24 @@ export class RegisterComponent implements OnInit {
     })
   }
 
+  ngOnDestroy() {
+    this.authSubscription.unsubscribe();
+  }
+
   register() {
-    console.log(this.registerForm.value);
+    if (!this.registerForm.valid) {
+      return;
+    }
+
     this.userService.register(this.registerForm.value).subscribe(() => {
-      this.router.navigate(['/login']);
+      this.router.navigate([ROUTES.login]);
     }, () => {
       this._snackBar.open("ERROR!", "CLOSE");
-    })
+    });
+  }
+
+  login() {
+    this.router.navigate([ROUTES.login]);
   }
 
 }

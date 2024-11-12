@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { UrlData } from '../model/url-data';
+import { Url } from '../model/url';
+import { API_ENDPOINT } from '../utils/api';
 
 @Injectable({
   providedIn: 'root'
@@ -12,23 +13,12 @@ export class UrlService {
     private http: HttpClient,
   ) { }
 
-  getUrl(shortUrl: string): Observable<UrlData> {
-    return this.http.get<UrlData>(`http://localhost:8080/api/url/${shortUrl}`);
+  getUrl(shortUrl: string): Observable<Url> {
+    return this.http.get<Url>(`${API_ENDPOINT}/url/${shortUrl}`);
   }
 
-  postUrl(longUrl: string): Observable<UrlData> {
-    return this.http.post<UrlData>(`http://localhost:8080/api/url`, { longUrl });
-  }
-
-  getUrls() {
-    return JSON.parse(localStorage.getItem("urls") as string) as UrlData[];
-  }
-
-  storeUrl(url: UrlData) {
-    const temp = this.getUrls() || [];
-    temp.push(url);
-    
-    localStorage.setItem("urls", JSON.stringify(temp));
+  postUrl(longUrl: string): Observable<Url> {
+    return this.http.post<Url>(`${API_ENDPOINT}/url`, { longUrl });
   }
 
 }

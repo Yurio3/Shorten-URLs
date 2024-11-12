@@ -1,22 +1,34 @@
 import { Injectable } from '@angular/core';
+import { Url } from '../model/url';
 
 @Injectable({
   providedIn: 'root'
 })
 export class StorageService {
 
-  readonly USER_KEY = 'auth';
+  readonly TOKEN_KEY = 'auth';
+  readonly URL_KEY = 'url';
 
   getToken() {
-    return localStorage.getItem(this.USER_KEY);
+    return localStorage.getItem(this.TOKEN_KEY);
   }
 
   setToken(token: string) {
-    localStorage.setItem(this.USER_KEY, token);
+    localStorage.setItem(this.TOKEN_KEY, token);
   }
 
   removeToken() {
-    localStorage.removeItem(this.USER_KEY);
+    localStorage.removeItem(this.TOKEN_KEY);
+  }
+
+  getUrls() {
+    return JSON.parse(localStorage.getItem(this.URL_KEY) as string) as string[];
+  }
+
+  storeUrl(url: Url) {
+    const temp = this.getUrls() || [];
+    temp.push(url.shortUrl);
+    localStorage.setItem(this.URL_KEY, JSON.stringify(temp));
   }
 
 }

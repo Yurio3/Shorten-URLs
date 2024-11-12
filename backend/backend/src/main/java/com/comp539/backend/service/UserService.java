@@ -32,7 +32,9 @@ public class UserService implements UserDetailsService {
         if (userExisting != null) {
             return null;
         }
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        if (user.getPassword() != null) {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+        }
         return userRepository.save(user).block();
     }
 

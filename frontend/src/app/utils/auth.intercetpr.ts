@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { StorageService } from '../services/storage.service';
 import { Router } from '@angular/router';
 import { tap } from 'rxjs/operators';
-import { routes } from './routes';
+import { ROUTES } from './routes';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
@@ -31,7 +31,7 @@ export class AuthInterceptor implements HttpInterceptor {
          return;
         }
         this.storageService.removeToken();
-        this.router.navigate([routes.login]);
+        this.router.navigate([ROUTES.login]);
       }
     }));
   }

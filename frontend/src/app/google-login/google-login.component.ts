@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
@@ -18,6 +18,7 @@ declare global {
 })
 export class GoogleLoginComponent  {
 
+  @Input() buttonText!: string;
   @Output() loginWithGoogle: EventEmitter<any> = new EventEmitter<any>();
 
   createFakeGoogleWrapper = () => {

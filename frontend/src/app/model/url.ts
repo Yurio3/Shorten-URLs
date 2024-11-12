@@ -1,4 +1,4 @@
-export interface UrlData {
+export interface Url {
     shortUrl: string;
     longUrl: string;
     createdAt: Date;
