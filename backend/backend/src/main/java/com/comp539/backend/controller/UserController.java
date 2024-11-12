@@ -6,6 +6,7 @@ import com.comp539.backend.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -15,7 +16,6 @@ public class UserController {
 
     private final UserService userService;
 
-    @CrossOrigin(origins = "http://localhost:4200")
     @PostMapping("/login")
     public ResponseEntity<UserDTO> login(@RequestBody UserDTO userDTO) {
         User user = userService.login(userDTO.getEmail(), userDTO.getPassword());
@@ -23,7 +23,6 @@ public class UserController {
     }
 
 
-    @CrossOrigin(origins = "http://localhost:4200")
     @PostMapping("/register")
     public ResponseEntity<UserDTO> register(@RequestBody UserDTO userDTO) {
         User userConverted = new User(userDTO.getEmail(), userDTO.getPassword(), userDTO.getFirstName(), userDTO.getLastName());
