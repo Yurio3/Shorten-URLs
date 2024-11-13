@@ -1,20 +1,19 @@
-<h2 mat-dialog-title>Short URL Info</h2>
+<h2 mat-dialog-title style="margin-bottom: 1em;">URL Info</h2>
+
 <mat-dialog-content>
 
-    <p>Short URL: {{urlData.shortUrl}}</p>
-    <p>Long URL: {{urlData.longUrl}}</p>
-    <p>Created At: {{urlData.createdAt | date}}</p>
-    <p>Expire At: {{urlData.expireAt | date}}</p>
-    <p>Click Count: {{urlData.clickCount}}</p>
-    <p>User Agent: {{urlData.userAgent | slice:0:50 }}</p>
-    <p>IP Address: {{urlData.ipAddress}}</p>
-    <p>Geo Location: {{urlData.geoLocation}}</p>
-    
-  
-  
+  <p><b>Short URL:</b> {{urlData.shortUrl}}</p>
+  <p><b>Long URL:</b> {{urlData.longUrl}}</p>
+  <p><b>Created At:</b> {{urlData.createdAt | date}}</p>
+  <p><b>Expire At:</b> {{urlData.expireAt | date}}</p>
+  <p><b>Click Count:</b> {{urlData.clickCount}}</p>
+  <p><b>User Agent:</b> {{urlData.userAgent | slice:0:50 }}</p>
+  <p><b>IP Address:</b> {{urlData.ipAddress}}</p>
+  <p><b>Geo Location:</b> {{urlData.geoLocation}}</p>
+
 </mat-dialog-content>
 
 <mat-dialog-actions style="display: flex; flex-direction: row; justify-content: space-between;">
-  <button mat-button (click)="cancel()">Cancel</button>
+  <div></div>
   <button mat-button cdkFocusInitial>Close</button>
 </mat-dialog-actions>

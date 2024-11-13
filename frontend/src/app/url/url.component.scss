@@ -1,4 +1,4 @@
-div.logout {
+div.spacer {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -6,3 +6,12 @@ div.logout {
     padding: 10px;
     margin-right: 20px;
 }
+
+div.main {
+    padding: 30px;
+
+    th, td {
+        width: 50%;
+    }
+}
+

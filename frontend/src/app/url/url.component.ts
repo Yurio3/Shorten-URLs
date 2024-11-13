@@ -1,9 +1,14 @@
-import { Component, OnInit } from '@angular/core';
-import { UrlService } from '../services/url.service';
-import { Url } from '../model/url';
+import { Component, OnInit, inject } from '@angular/core';
+
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule } from '@angular/material/table';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 import {
   MAT_DIALOG_DATA,
@@ -14,27 +19,15 @@ import {
   MatDialogRef,
   MatDialogTitle,
 } from '@angular/material/dialog';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
 
-export interface DialogData {
-  animal: string;
-  name: string;
-}
-
-
-import { ChangeDetectionStrategy, inject, model, signal } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
-
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
 import { StorageService } from '../services/storage.service';
+import { ROUTES } from '../utils/routes';
+import { UrlService } from '../services/url.service';
+import { Url } from '../model/url';
 
-const isValidUrl = (string: string) => {
+const isUrlValid = (url: string) => {
   try {
-    new URL(string);
+    new URL(url);
     return true;
   } catch (err) {
     return false;
@@ -59,9 +52,7 @@ const isValidUrl = (string: string) => {
 })
 export class FetchUrlDialog {
   readonly dialogRef = inject(MatDialogRef<FetchUrlDialog>);
-  readonly data = inject<DialogData>(MAT_DIALOG_DATA);
-  readonly urlData = this.data as unknown as Url;
-
+  readonly urlData = inject<Url>(MAT_DIALOG_DATA) as unknown as Url;
 
   cancel() {
     this.dialogRef.close();
@@ -85,14 +76,10 @@ export class FetchUrlDialog {
     MatDialogClose,
   ],
 })
-export class DialogOverviewExampleDialog {
-  readonly dialogRef = inject(MatDialogRef<DialogOverviewExampleDialog>);
+export class CreateUrlDialog {
+  readonly dialogRef = inject(MatDialogRef<CreateUrlDialog>);
   private _snackBar = inject(MatSnackBar);
-  openSnackBar(message: string, action: string) {
-    this._snackBar.open(message, action);
-  }
-
-  urlData?: Url;
+  urlData!: Url;
 
   constructor(
     private urlService: UrlService,
@@ -103,35 +90,30 @@ export class DialogOverviewExampleDialog {
     this.dialogRef.close();
   }
 
-  convertUrl(temp: HTMLInputElement) {
+  createUrl(temp: HTMLInputElement) {
     const longUrl = temp.value;
     if (!longUrl.trim()) {
-      this._snackBar.open("URL EMPTY!!", "OK", {
+      this._snackBar.open("URL EMPTY!", "OK", {
         verticalPosition: 'top',
         horizontalPosition: 'right',
         panelClass: 'snackbar',
-
       });
       return;
 
     }
 
-    if (!isValidUrl(longUrl)) {
-      this._snackBar.open("URL INVALID!!", "OK", {
+    if (!isUrlValid(longUrl)) {
+      this._snackBar.open("URL INVALID!", "OK", {
         verticalPosition: 'top',
         horizontalPosition: 'right',
         panelClass: 'snackbar',
-
       });
       return;
-
     }
 
     this.urlService.postUrl(longUrl).subscribe(res => {
-      temp.value = '';
       this.urlData = res;
       this.storageService.storeUrl(res);
-
     });
   }
 }
@@ -143,62 +125,39 @@ export class DialogOverviewExampleDialog {
   imports: [MatTableModule, MatButtonModule],
   templateUrl: './url.component.html',
   styleUrl: './url.component.scss',
-
 })
 export class UrlComponent implements OnInit {
+  readonly dialog = inject(MatDialog);
+
+  dataSource: string[] = [];
+  displayColumns = ['shortUrl', 'action']
+  urlData: Url = {} as Url;
 
   constructor(
     private urlService: UrlService,
-    private router: Router,
     private storageService: StorageService,
+    private router: Router,
   ) { }
-
-  logout() {
-    this.router.navigate(['/login']);
-  }
-
-  displayedColumns = ['shortUrl', 'action']
-
-  openFetchDialog(shortUrl: string) {
-    this.urlService.getUrl(shortUrl).subscribe(res => {
-      this.dialog.open(FetchUrlDialog, { data: res });
-    });
-  }
-
-  visitLink(shortUrl: string) {
-    this.urlService.getUrl(shortUrl).subscribe(res => {
-      window.open(res.longUrl, '_blank');
-    });
-  }
 
   ngOnInit() {
     this.dataSource = this.storageService.getUrls() || [];
-    console.log(this.dataSource);
   }
 
-  urlData: Url = {} as Url;
-  dataSource: string[] = [];
-
-  getUrl(shortUrl: string) {
-    this.urlService.getUrl(shortUrl).subscribe(res => this.urlData = res);
+  logout() {
+    this.storageService.removeToken();
+    this.router.navigate([ROUTES.login]);
   }
 
-  postUrl(longUrl: string) {
-    this.urlService.postUrl(longUrl).subscribe(res => this.urlData = res);
+  viewRecord(shortUrl: string) {
+    this.urlService.getUrl(shortUrl).subscribe(res => this.dialog.open(FetchUrlDialog, { data: res }));
   }
 
-  readonly dialog = inject(MatDialog);
-
-  openDialog(): void {
-    const dialogRef = this.dialog.open(DialogOverviewExampleDialog, {
-      //data: {name: this.name(), animal: this.animal()},
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-      this.ngOnInit();
-    });
+  visitLink(shortUrl: string) {
+    this.urlService.getUrl(shortUrl).subscribe(res => window.open(res.longUrl, '_blank'));
   }
 
+  addUrl() {
+    this.dialog.open(CreateUrlDialog).afterClosed().subscribe(() => this.ngOnInit());
+  }
 
 }
