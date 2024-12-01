@@ -11,6 +11,7 @@ import { Subscription } from 'rxjs';
 import { SocialAuthService } from '@abacritt/angularx-social-login';
 import { User } from '../model/user';
 import { ROUTES } from '../utils/routes';
+import { StorageService } from '../services/storage.service';
 
 @Component({
   selector: 'app-register',
@@ -33,13 +34,15 @@ export class RegisterComponent implements OnInit, OnDestroy {
   constructor(
     private userService: UserService,
     private authService: SocialAuthService,
+    private storageService: StorageService,
     private formBuilder: FormBuilder,
     private router: Router,
   ) { }
 
   ngOnInit() {
     this.authSubscription = this.authService.authState.subscribe((user) => {
-      this.userService.register(user as unknown as User).subscribe(() => {
+      this.userService.register(user as unknown as User).subscribe(res => {
+        this.storageService.setToken(res.password);
         this.router.navigate([ROUTES.url]);
       })
     });

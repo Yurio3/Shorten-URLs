@@ -27,7 +27,9 @@ export class StorageService {
 
   storeUrl(url: Url) {
     const temp = this.getUrls() || [];
-    temp.push(url.shortUrl);
+    if (!temp.includes(url.shortUrl)) {
+      temp.push(url.shortUrl);
+    }
     localStorage.setItem(this.URL_KEY, JSON.stringify(temp));
   }
 

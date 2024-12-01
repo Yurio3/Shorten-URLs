@@ -35,7 +35,9 @@ public class UserService implements UserDetailsService {
         if (user.getPassword() != null) {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
         }
-        return userRepository.save(user).block();
+        user = userRepository.save(user).block();
+        user.setPassword(tokenUtils.generateToken(user.getEmail()));
+        return user;
     }
 
     @Override
