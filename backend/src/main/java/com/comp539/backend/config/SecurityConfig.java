@@ -66,7 +66,7 @@ public class SecurityConfig {
                         e.requestMatchers("/api/user/register").permitAll()
                                 .requestMatchers("api/user/login").permitAll()
                                 .requestMatchers("/api/url").authenticated()
-                                .requestMatchers("/api/url/*").authenticated())
+                                .requestMatchers("/*").permitAll())
                 .sessionManagement(e -> e.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .exceptionHandling(e -> e.authenticationEntryPoint(new AuthEntryPoint()))
                 .addFilterBefore(new AuthFilter(userService, tokenUtils), BasicAuthenticationFilter.class)
