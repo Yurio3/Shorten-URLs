@@ -25,6 +25,9 @@ import { ROUTES } from '../utils/routes';
 import { UrlService } from '../services/url.service';
 import { Url } from '../model/url';
 
+import { Clipboard } from '@angular/cdk/clipboard';
+import { environment } from '../../environments/environment.development';
+
 const isUrlValid = (url: string) => {
   try {
     new URL(url);
@@ -137,6 +140,7 @@ export class UrlComponent implements OnInit {
     private urlService: UrlService,
     private storageService: StorageService,
     private router: Router,
+    private clipboard: Clipboard,
   ) { }
 
   ngOnInit() {
@@ -154,6 +158,10 @@ export class UrlComponent implements OnInit {
 
   visitLink(shortUrl: string) {
     this.urlService.getUrl(shortUrl).subscribe(res => window.open(res.longUrl, '_blank'));
+  }
+
+  copyLink(shortUrl: string) {
+    this.clipboard.copy(`${environment.apiUrl.replace('/api', '')}/${shortUrl}`);
   }
 
   addUrl() {

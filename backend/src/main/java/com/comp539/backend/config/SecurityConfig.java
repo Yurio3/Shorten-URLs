@@ -49,9 +49,9 @@ public class SecurityConfig {
 
     @Bean
     public CorsFilter corsFilter() {
-        // Constants.FRONTEND
         CorsConfiguration config = new CorsConfiguration();
         config.addAllowedOrigin("http://localhost:4200");
+        config.addAllowedOrigin("https://frontend-101764297890.us-east1.run.app");
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

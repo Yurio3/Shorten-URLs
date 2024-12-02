@@ -14,8 +14,7 @@
     <ng-container matColumnDef="action">
       <th mat-header-cell *matHeaderCellDef>ACTIONS</th>
       <td mat-cell *matCellDef="let element">
-        <button style="margin-right: 1em;" mat-raised-button (click)="viewRecord(element)">View Record</button>
-        <button mat-raised-button (click)="visitLink(element)">Visit Link</button>
+        <button mat-raised-button (click)="copyLink(element)">Copy Link</button>
       </td>
     </ng-container>
 

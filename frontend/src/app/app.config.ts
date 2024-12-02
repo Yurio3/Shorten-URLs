@@ -20,7 +20,7 @@ export const appConfig: ApplicationConfig = {
       providers: [
         {
           id: GoogleLoginProvider.PROVIDER_ID,
-          provider: new GoogleLoginProvider('258444461314-eos33s7j7gjmp50s7c9tqmetvl9ooauu.apps.googleusercontent.com'),
+          provider: new GoogleLoginProvider('101764297890-nlassd8v508jher3bg6jjgiasdjrjp89.apps.googleusercontent.com'),
         },
       ],
     } as SocialAuthServiceConfig,

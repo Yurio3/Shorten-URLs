@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Url } from '../model/url';
-import { API_ENDPOINT } from '../utils/api';
+import { environment } from '../../environments/environment.development';
 
 @Injectable({
   providedIn: 'root'
@@ -14,11 +14,11 @@ export class UrlService {
   ) { }
 
   getUrl(shortUrl: string): Observable<Url> {
-    return this.http.get<Url>(`${API_ENDPOINT}/url/${shortUrl}`);
+    return this.http.get<Url>(`${environment.apiUrl}/url/${shortUrl}`);
   }
 
   postUrl(longUrl: string): Observable<Url> {
-    return this.http.post<Url>(`${API_ENDPOINT}/url`, { longUrl });
+    return this.http.post<Url>(`${environment.apiUrl}/url`, { longUrl });
   }
 
 }

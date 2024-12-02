@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { User } from '../model/user';
-import { API_ENDPOINT } from '../utils/api';
+import { environment } from '../../environments/environment.development';
 
 @Injectable({
   providedIn: 'root'
@@ -13,11 +13,11 @@ export class UserService {
   ) { }
 
   register(user: User) {
-    return this.http.post<User>(`${API_ENDPOINT}/user/register`, user);
+    return this.http.post<User>(`${environment.apiUrl}/user/register`, user);
   }
 
   login(user: User) {
-    return this.http.post<User>(`${API_ENDPOINT}/user/login`, user);
+    return this.http.post<User>(`${environment.apiUrl}/user/login`, user);
   }
 
 }
